@@ -1,0 +1,3 @@
+[submodule "src/tools/ui-theme/external/ui-component-showcase"]
+	path = src/tools/ui-theme/external/ui-component-showcase
+	url = https://github.com/planetarium/UI-Component-Showcase.git

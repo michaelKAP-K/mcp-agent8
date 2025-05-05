@@ -7,8 +7,8 @@ import { logger } from '../../utils/logging.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-// Theme directory paths
-const THEMES_DIR = path.join(__dirname, 'themes-export');
+// Theme directory paths - pointing directly to the external themes in submodule
+const THEMES_DIR = path.join(__dirname, 'external', 'ui-component-showcase', 'themes-export');
 const THEMES_INDEX_PATH = path.join(THEMES_DIR, 'index.json');
 
 let themesCache: any = null;
@@ -69,6 +69,30 @@ export async function getTheme(themeName: string): Promise<any> {
   } catch (error) {
     logger.error(`Failed to get theme '${themeName}':`, error);
     throw error;
+  }
+}
+
+/**
+ * Get component styles from a theme
+ *
+ * @param {string} themeName - Name of the theme
+ * @param {string} componentName - Name of the component
+ * @returns {Promise<any>} Component style object or null
+ */
+export async function getComponentStyle(
+  themeName: string,
+  componentName: string
+): Promise<any> {
+  try {
+    const componentsPath = path.join(THEMES_DIR, 'themes', themeName, 'components.json');
+    if (fs.existsSync(componentsPath)) {
+      const componentsData = JSON.parse(fs.readFileSync(componentsPath, 'utf-8'));
+      return componentsData[componentName] || null;
+    }
+    return null;
+  } catch (error) {
+    logger.error(`Failed to get component style:`, error);
+    return null;
   }
 }
 
